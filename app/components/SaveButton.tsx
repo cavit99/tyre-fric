@@ -10,9 +10,6 @@ export default function SaveButton() {
   const handleSave = useCallback(async () => {
     setIsLoading(true)
 
-    // Create a web worker for heavy processing
-    const worker = new Worker(new URL('./imageWorker.js', import.meta.url))
-
     let tempContainer: HTMLDivElement | null = null;
 
     try {
@@ -81,7 +78,6 @@ export default function SaveButton() {
         })
       }
       setIsLoading(false)
-      worker.terminate()
     }
   }, [])
 
