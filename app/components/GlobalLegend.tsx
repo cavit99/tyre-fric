@@ -1,52 +1,60 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { Data, Layout } from 'plotly.js'
 
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false })
 
 export default function GlobalLegend() {
-  const data = [
+  const data: Data[] = [
     {
       x: [0],
       y: [0],
-      type: 'scatter',
-      mode: 'lines',
+      type: 'scatter' as const,
+      mode: 'lines' as const,
       line: { color: 'blue' },
       name: 'Lateral Force',
     },
     {
       x: [0],
       y: [0],
-      type: 'scatter',
-      mode: 'lines',
+      type: 'scatter' as const,
+      mode: 'lines' as const,
       line: { color: 'orange' },
       name: 'Longitudinal Force',
     },
     {
       x: [0],
       y: [0],
-      type: 'scatter',
-      mode: 'lines',
+      type: 'scatter' as const,
+      mode: 'lines' as const,
       line: { color: 'green' },
       name: 'Resultant Force',
     },
     {
       x: [0, 1],
       y: [0, 0],
-      type: 'scatter',
-      mode: 'lines',
+      type: 'scatter' as const,
+      mode: 'lines' as const,
       line: { color: 'gray', dash: 'dash' },
       name: 'Friction Circle',
     },
   ]
 
-  const layout = {
+  const layout: Partial<Layout> = {
     showlegend: true,
-    legend: { orientation: 'h' },
+    legend: { orientation: 'h' as const },
     height: 50,
     margin: { l: 0, r: 0, t: 0, b: 0 },
-    xaxis: { visible: false },
-    yaxis: { visible: false },
+    xaxis: { 
+      visible: false,
+      fixedrange: true
+    },
+    yaxis: { 
+      visible: false,
+      fixedrange: true
+    },
+    dragmode: false as const,
     annotations: [
       {
         x: 0,
@@ -90,5 +98,11 @@ export default function GlobalLegend() {
     ],
   }
 
-  return <Plot data={data} layout={layout} />
+  const config = {
+    displayModeBar: false,
+    responsive: true,
+    scrollZoom: false,
+  }
+
+  return <Plot data={data} layout={layout} config={config} />
 }

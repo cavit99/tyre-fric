@@ -53,17 +53,17 @@ export default function Home() {
   return (
     <main className="container mx-auto px-4 py-8 min-h-screen flex flex-col items-center">
       <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-center">
-        Tyre Friction Circles Visualization
+        Tyre Friction Circles Visualisation
       </h1>
       <div className="plots-container w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-8">
         {Object.entries(tyreStates).map(([tyre, state]) => (
           <div key={tyre} className="flex flex-col items-center p-4 border rounded-lg">
             <TyreVisualization 
-              title={`${tyre.replace(/([A-Z])/g, ' $1').trim()} Tyre`} 
+              title={`${tyre.replace(/([A-Z])/g, ' $1').trim().replace(/^(.)/, c => c.toUpperCase())} Tyre`} 
               state={state} 
             />
             <Sliders
-              title={`${tyre.replace(/([A-Z])/g, ' $1').trim()} Tyre`}
+              title={`${tyre.replace(/([A-Z])/g, ' $1').trim().replace(/^(.)/, c => c.toUpperCase())} Tyre`}
               state={state}
               updateState={(property: keyof TyreState, value: number) => 
                 updateTyreState(tyre as TyrePosition, property, value)

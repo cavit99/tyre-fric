@@ -5,8 +5,8 @@ import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Tyre Friction Circles Visualization',
-  description: 'Interactive visualization of friction circles for a car\'s four tyres',
+  title: 'Tyre Friction Circles Visualisation',
+  description: 'Interactive visualisation of friction circles for a car\'s four tyres',
 }
 
 export default function RootLayout({

@@ -3,7 +3,19 @@
 import { Slider } from "@/components/ui/slider"
 import { Label } from "@/components/ui/label"
 
-export default function Sliders({ title, state, updateState }) {
+interface SliderState {
+  lateral: number;
+  longitudinal: number;
+  radius: number;
+}
+
+interface SlidersProps {
+  title: string;
+  state: SliderState;
+  updateState: (key: keyof SliderState, value: number) => void;
+}
+
+export default function Sliders({ title, state, updateState }: SlidersProps) {
   return (
     <div className="p-4 border rounded-lg w-full mt-4">
       <h3 className="text-lg font-semibold mb-4">{title} Controls</h3>
