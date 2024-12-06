@@ -21,6 +21,13 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  webpack: (config, { isServer }) => {
+    config.ignoreWarnings = [
+      { module: /node_modules\/node-fetch\/lib\/index\.js/ },
+      { module: /node_modules\/punycode\/punycode\.js/ },
+    ];
+    return config;
+  },
 }
 
 mergeConfig(nextConfig, userConfig)

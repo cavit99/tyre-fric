@@ -3,10 +3,22 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import { useWindowSize } from '@/hooks/useWindowSize'
+import { Data, Layout, Config, PlotData } from 'plotly.js'
 
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false })
 
-export default function TyreVisualization({ title, state }) {
+interface TyreState {
+  lateral: number
+  longitudinal: number
+  radius: number
+}
+
+interface TyreVisualizationProps {
+  title: string
+  state: TyreState
+}
+
+export default function TyreVisualization({ title, state }: TyreVisualizationProps) {
   const { lateral, longitudinal, radius } = state
   const resultant = Math.sqrt(lateral ** 2 + longitudinal ** 2)
   const { width } = useWindowSize()
@@ -23,19 +35,19 @@ export default function TyreVisualization({ title, state }) {
     }
   }, [width])
 
-  const data = [
+  const data: Data[] = [
     {
-      type: 'scatter',
+      type: 'scatter' as const,
       x: [...Array(101)].map((_, i) => radius * Math.cos((2 * Math.PI * i) / 100)),
       y: [...Array(101)].map((_, i) => radius * Math.sin((2 * Math.PI * i) / 100)),
-      mode: 'lines',
+      mode: 'lines' as const,
       line: { color: 'gray', dash: 'dash' },
       name: 'Friction Circle',
       showlegend: false,
     },
   ]
 
-  const layout = {
+  const layout: Partial<Layout> = {
     title,
     xaxis: { 
       range: [-1.5, 1.5], 
@@ -98,7 +110,7 @@ export default function TyreVisualization({ title, state }) {
         arrowcolor: 'orange',
         axref: 'x',
         ayref: 'y',
-        xanchor: 'middle',
+        xanchor: 'center',
         yanchor: longitudinal >= 0 ? 'bottom' : 'top',
         text: '',
       },
@@ -124,7 +136,7 @@ export default function TyreVisualization({ title, state }) {
     ]
   }
 
-  const config = {
+  const config: Partial<Config> = {
     displayModeBar: false,
     responsive: true,
     scrollZoom: false,

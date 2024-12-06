@@ -7,15 +7,34 @@ import ResetAllButton from './components/ResetAllButton'
 import SaveButton from './components/SaveButton'
 import GlobalLegend from './components/GlobalLegend'
 
+interface TyreState {
+  lateral: number
+  longitudinal: number
+  radius: number
+}
+
+type TyrePosition = 'frontLeft' | 'frontRight' | 'rearLeft' | 'rearRight'
+
+interface TyreStates {
+  frontLeft: TyreState
+  frontRight: TyreState
+  rearLeft: TyreState
+  rearRight: TyreState
+}
+
 export default function Home() {
-  const [tyreStates, setTyreStates] = useState({
+  const [tyreStates, setTyreStates] = useState<TyreStates>({
     frontLeft: { lateral: 0, longitudinal: 0, radius: 0.7 },
     frontRight: { lateral: 0, longitudinal: 0, radius: 0.7 },
     rearLeft: { lateral: 0, longitudinal: 0, radius: 0.7 },
     rearRight: { lateral: 0, longitudinal: 0, radius: 0.7 },
   })
 
-  const updateTyreState = (tyre, property, value) => {
+  const updateTyreState = (
+    tyre: TyrePosition,
+    property: keyof TyreState,
+    value: number
+  ) => {
     setTyreStates(prevState => ({
       ...prevState,
       [tyre]: { ...prevState[tyre], [property]: value },
@@ -46,7 +65,9 @@ export default function Home() {
             <Sliders
               title={`${tyre.replace(/([A-Z])/g, ' $1').trim()} Tyre`}
               state={state}
-              updateState={(property, value) => updateTyreState(tyre, property, value)}
+              updateState={(property: keyof TyreState, value: number) => 
+                updateTyreState(tyre as TyrePosition, property, value)
+              }
             />
           </div>
         ))}
