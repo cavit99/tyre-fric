@@ -4,6 +4,7 @@ import { useState } from 'react'
 import TyreVisualization from './components/TyreVisualization'
 import Sliders from './components/Sliders'
 import ResetAllButton from './components/ResetAllButton'
+import SaveButton from './components/SaveButton'
 import GlobalLegend from './components/GlobalLegend'
 
 export default function Home() {
@@ -35,7 +36,7 @@ export default function Home() {
       <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-center">
         Tyre Friction Circles Visualization
       </h1>
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-8">
+      <div className="plots-container w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-8">
         {Object.entries(tyreStates).map(([tyre, state]) => (
           <div key={tyre} className="flex flex-col items-center p-4 border rounded-lg">
             <TyreVisualization 
@@ -53,7 +54,10 @@ export default function Home() {
       <div className="w-full max-w-3xl">
         <GlobalLegend />
       </div>
-      <ResetAllButton onReset={resetAll} />
+      <div className="flex gap-2">
+        <ResetAllButton onReset={resetAll} />
+        <SaveButton />
+      </div>
     </main>
   )
 }
