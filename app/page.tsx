@@ -31,12 +31,17 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1 className="text-4xl font-bold mb-8">Tyre Friction Circles Visualization</h1>
-      <div className="grid grid-cols-2 gap-8 mb-8">
+    <main className="container mx-auto px-4 py-8 min-h-screen flex flex-col items-center">
+      <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-center">
+        Tyre Friction Circles Visualization
+      </h1>
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-8">
         {Object.entries(tyreStates).map(([tyre, state]) => (
-          <div key={tyre} className="flex flex-col items-center">
-            <TyreVisualization title={`${tyre.replace(/([A-Z])/g, ' $1').trim()} Tyre`} state={state} />
+          <div key={tyre} className="flex flex-col items-center p-4 border rounded-lg">
+            <TyreVisualization 
+              title={`${tyre.replace(/([A-Z])/g, ' $1').trim()} Tyre`} 
+              state={state} 
+            />
             <Sliders
               title={`${tyre.replace(/([A-Z])/g, ' $1').trim()} Tyre`}
               state={state}
@@ -45,7 +50,9 @@ export default function Home() {
           </div>
         ))}
       </div>
-      <GlobalLegend />
+      <div className="w-full max-w-3xl">
+        <GlobalLegend />
+      </div>
       <ResetAllButton onReset={resetAll} />
     </main>
   )

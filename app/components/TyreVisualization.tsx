@@ -1,15 +1,29 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react'
+import { useWindowSize } from '@/hooks/useWindowSize'
 
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false })
 
 export default function TyreVisualization({ title, state }) {
   const { lateral, longitudinal, radius } = state
   const resultant = Math.sqrt(lateral ** 2 + longitudinal ** 2)
+  const { width } = useWindowSize()
+  const [plotSize, setPlotSize] = useState(400)
+
+  useEffect(() => {
+    // Responsive sizing logic
+    if (width < 640) { // mobile
+      setPlotSize(300)
+    } else if (width < 1024) { // tablet
+      setPlotSize(350)
+    } else { // desktop
+      setPlotSize(400)
+    }
+  }, [width])
 
   const data = [
-    // Friction Circle
     {
       type: 'scatter',
       x: [...Array(101)].map((_, i) => radius * Math.cos((2 * Math.PI * i) / 100)),
@@ -23,11 +37,22 @@ export default function TyreVisualization({ title, state }) {
 
   const layout = {
     title,
-    xaxis: { range: [-1.5, 1.5], zeroline: true, scaleanchor: 'y', scaleratio: 1 },
-    yaxis: { range: [-1.5, 1.5], zeroline: true },
-    width: 400,
-    height: 400,
+    xaxis: { 
+      range: [-1.5, 1.5], 
+      zeroline: true, 
+      scaleanchor: 'y', 
+      scaleratio: 1,
+      fixedrange: true 
+    },
+    yaxis: { 
+      range: [-1.5, 1.5], 
+      zeroline: true,
+      fixedrange: true 
+    },
+    width: plotSize,
+    height: plotSize,
     showlegend: false,
+    dragmode: false,
     shapes: resultant > radius ? [{
       type: 'circle',
       xref: 'x',
@@ -52,9 +77,11 @@ export default function TyreVisualization({ title, state }) {
         arrowsize: 1,
         arrowwidth: 2,
         arrowcolor: 'blue',
-        standoff: 0,
         axref: 'x',
-        ayref: 'y'
+        ayref: 'y',
+        xanchor: lateral >= 0 ? 'right' : 'left',
+        yanchor: 'middle',
+        text: '',
       },
       // Longitudinal Force Arrow
       {
@@ -69,9 +96,11 @@ export default function TyreVisualization({ title, state }) {
         arrowsize: 1,
         arrowwidth: 2,
         arrowcolor: 'orange',
-        standoff: 0,
         axref: 'x',
-        ayref: 'y'
+        ayref: 'y',
+        xanchor: 'middle',
+        yanchor: longitudinal >= 0 ? 'bottom' : 'top',
+        text: '',
       },
       // Resultant Force Arrow
       {
@@ -86,12 +115,20 @@ export default function TyreVisualization({ title, state }) {
         arrowsize: 1,
         arrowwidth: 3,
         arrowcolor: 'green',
-        standoff: 0,
         axref: 'x',
-        ayref: 'y'
+        ayref: 'y',
+        xanchor: lateral >= 0 ? 'right' : 'left',
+        yanchor: longitudinal >= 0 ? 'bottom' : 'top',
+        text: '',
       }
     ]
   }
 
-  return <Plot data={data} layout={layout} />
+  const config = {
+    displayModeBar: false,
+    responsive: true,
+    scrollZoom: false,
+  }
+
+  return <Plot data={data} layout={layout} config={config} />
 }
